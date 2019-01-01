@@ -32,28 +32,38 @@
         <junit.surefire.plugin.version>1.2.0</junit.surefire.plugin.version>
         <surefire.version>2.21.0</surefire.version>
         <failsafe.version>2.21.0</failsafe.version>
+        <jsch.version>0.1.54</jsch.version>
+        <expect.version>0.9.0</expect.version>
+        <json.version>20160212</json.version>
     </properties>
 
+    <dependencies>
+        <dependency>
+            <groupId>net.sf.expectit</groupId>
+            <artifactId>expectit-core</artifactId>
+            <version>${expect.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.jcraft</groupId>
+            <artifactId>jsch</artifactId>
+            <version>${jsch.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.json</groupId>
+            <artifactId>json</artifactId>
+            <version>${json.version}</version>
+        </dependency>
+    </dependencies>
+
     <scm>
-        <connection></connection>
-        <developerConnection></developerConnection>
-        <url></url>
+        <url>https://github.com/oopsaleem/nsync-kafka-connect</url>
+        <connection>scm:git:https://github.com/oopsaleem/nsync-kafka-connect.git</connection>
+        <developerConnection>scm:git:git://git@github.com:oopsaleem/nsync-kafka-connect.git</developerConnection>
     </scm>
     <issueManagement>
-        <system></system>
-        <url></url>
+        <system>github</system>
+        <url>https://github.com/oopsaleem/nsync-kafka-connect</url>
     </issueManagement>
-
-    <!--<scm>-->
-        <!--<url>https://github.com/jcustenborder/kafka-connect-parent</url>-->
-        <!--<connection>scm:git:https://github.com/jcustenborder/kafka-connect-parent.git</connection>-->
-        <!--<developerConnection>scm:git:git://git@github.com:jcustenborder/kafka-connect-parent.git</developerConnection>-->
-    <!--</scm>-->
-
-    <!--<issueManagement>-->
-        <!--<url>https://github.com/jcustenborder/kafka-connect-parent/issues</url>-->
-        <!--<system>github</system>-->
-    <!--</issueManagement>-->
 
     <build>
         <plugins>
@@ -66,6 +76,4 @@
             </plugin>
         </plugins>
     </build>
-
-
 </project>

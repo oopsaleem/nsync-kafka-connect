@@ -1,10 +1,5 @@
 package noc.nsync.connect.ssh;
 
-import org.apache.kafka.connect.data.Field;
-import org.apache.kafka.connect.data.Schema;
-import org.apache.kafka.connect.data.SchemaBuilder;
-import org.apache.kafka.connect.data.Struct;
-import org.apache.kafka.connect.errors.ConnectException;
 import org.apache.kafka.connect.source.SourceRecord;
 import org.apache.kafka.connect.source.SourceTask;
 import com.github.jcustenborder.kafka.connect.utils.VersionUtil;
@@ -14,12 +9,12 @@ import org.slf4j.LoggerFactory;
 import java.util.List;
 import java.util.Map;
 
-public class MySourceTask extends SourceTask {
+public class AlarmSourceTask extends SourceTask {
   /*
     Your connector should never use System.out for logging. All of your classes should use slf4j
     for logging
  */
-  static final Logger log = LoggerFactory.getLogger(MySourceTask.class);
+  static final Logger log = LoggerFactory.getLogger(AlarmSourceTask.class);
 
   @Override
   public String version() {
