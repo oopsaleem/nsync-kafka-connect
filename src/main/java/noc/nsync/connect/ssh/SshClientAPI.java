@@ -80,8 +80,8 @@ public class SshClientAPI {
 
             try {
                 channel = session.openChannel("shell");
-                //channel.connect(60_000);
                 log.info("Shell channel opened. ");
+                //channel.connect(60_000);
             } catch (JSchException e) {
                 disconnect();
                 log.error("Could not open shell channel", e);
