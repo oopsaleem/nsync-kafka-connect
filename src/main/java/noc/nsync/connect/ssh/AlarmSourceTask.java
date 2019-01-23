@@ -18,8 +18,7 @@ import java.util.Map;
 
 import static net.sf.expectit.matcher.Matchers.anyOf;
 import static net.sf.expectit.matcher.Matchers.contains;
-import static noc.nsync.connect.ssh.SshOutputSchema.KEY_SCHEMA;
-import static noc.nsync.connect.ssh.SshOutputSchema.NODE_ID_FIELD;
+import static noc.nsync.connect.ssh.SshOutputSchema.*;
 
 public class AlarmSourceTask extends SourceTask {
     private static final Logger log = LoggerFactory.getLogger(AlarmSourceTask.class);
@@ -43,9 +42,18 @@ public class AlarmSourceTask extends SourceTask {
         }
     }
 
+    private boolean initTake = false;
+
     @Override
     public List<SourceRecord> poll() throws InterruptedException {
         final ArrayList<SourceRecord> records = new ArrayList<>();
+
+        if(initTake) {
+            SourceRecord sourceRecord = generateSourceRecord(new SshOutput(config.nodeHostConfig, client.getAllip(), Instant.now()));
+            records.add(sourceRecord);
+            initTake = true;
+        }
+
         if (client.isConnected()) {
             MultiResult result = null;
             try {
@@ -89,19 +97,25 @@ public class AlarmSourceTask extends SourceTask {
     private SourceRecord generateSourceRecord(SshOutput sshOutput) {
         return new SourceRecord(
                 sourcePartition(),
-                null, //No offset
+                sourceOffset(),
                 config.topicConfig,
                 null, // partition will be inferred by the framework
                 SshOutputSchema.KEY_SCHEMA,
                 new Struct(KEY_SCHEMA).put(NODE_ID_FIELD, sshOutput.getNodeId()),
                 SshOutputSchema.VALUE_SCHEMA,
-                new Struct(KEY_SCHEMA).put(NODE_ID_FIELD, sshOutput.getOutput()),
+                new Struct(VALUE_SCHEMA).put(OUTPUT_FIELD, sshOutput.getOutput()),
                 sshOutput.getModifiedAt().toEpochMilli());
     }
 
     private Map<String, String> sourcePartition() {
         Map<String, String> map = new HashMap<>();
         map.put(NODE_ID_FIELD, String.valueOf(config.nodeHostConfig));
+        return map;
+    }
+
+    private Map<String, Long> sourceOffset() {
+        Map<String, Long> map = new HashMap<>();
+        map.put("instant", Instant.now().toEpochMilli());
         return map;
     }
 
