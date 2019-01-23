@@ -2,6 +2,7 @@ package noc.nsync.connect.ssh;
 
 import com.github.jcustenborder.kafka.connect.utils.config.ConfigKeyBuilder;
 import noc.nsync.connect.ssh.validators.PortValidator;
+import noc.nsync.connect.ssh.validators.TimeoutValidator;
 import org.apache.kafka.common.config.AbstractConfig;
 import org.apache.kafka.common.config.ConfigDef;
 import org.apache.kafka.common.config.ConfigDef.Importance;
@@ -35,11 +36,15 @@ public class AlarmSourceConnectorConfig extends AbstractConfig {
   public static final String NODE_AUTH_PASSWORD_CONFIG = "node.auth.password";
   private static final String NODE_AUTH_PASSWORD_DOC = "Password to authenticate calls";
 
+  public static final String EXPECT_TIMEOUT_SEC_CONFIG = "response.timeout.sec";
+  private static final String EXPECT_TIMEOUT_SEC_DOC = "Timeout to expected response in seconds";
+
   public final String topicConfig;
   public final String connectorClassConfig;
   public final int tasksMaxConfig;
   public final String nodeHostConfig;
   public final int nodePortConfig;
+  public final long expectTimeOutConfig;
   public final String nodeAuthUsernameConfig;
   public final String nodeAuthPasswordConfig;
 
@@ -51,6 +56,7 @@ public class AlarmSourceConnectorConfig extends AbstractConfig {
     this.tasksMaxConfig = this.getInt(TASKS_MAX_CONFIG);
     this.nodeHostConfig = this.getString(NODE_HOST_CONFIG);
     this.nodePortConfig = this.getInt(NODE_PORT_CONFIG);
+    this.expectTimeOutConfig = this.getLong(EXPECT_TIMEOUT_SEC_CONFIG);
     this.nodeAuthUsernameConfig = this.getString(NODE_AUTH_USERNAME_CONFIG);
     this.nodeAuthPasswordConfig = this.getPassword(NODE_AUTH_PASSWORD_CONFIG).value();
   }
@@ -66,6 +72,8 @@ public class AlarmSourceConnectorConfig extends AbstractConfig {
             .define(ConfigKeyBuilder.of(NODE_HOST_CONFIG, Type.STRING).documentation(NODE_HOST_DOC).importance(Importance.HIGH).build())
             .define(ConfigKeyBuilder.of(NODE_PORT_CONFIG, Type.INT).documentation(NODE_PORT_DOC).importance(Importance.HIGH)
                     .defaultValue(22).validator(new PortValidator()).build())
+            .define(ConfigKeyBuilder.of(EXPECT_TIMEOUT_SEC_CONFIG, Type.LONG).documentation(EXPECT_TIMEOUT_SEC_DOC).importance(Importance.HIGH)
+                    .defaultValue(5).validator(new TimeoutValidator()).build())
             .define(ConfigKeyBuilder.of(NODE_AUTH_USERNAME_CONFIG, Type.STRING).documentation(NODE_AUTH_USERNAME_DOC).importance(Importance.HIGH).build())
             .define(ConfigKeyBuilder.of(NODE_AUTH_PASSWORD_CONFIG, Type.PASSWORD).documentation(NODE_AUTH_PASSWORD_DOC).importance(Importance.HIGH).build())
             ;

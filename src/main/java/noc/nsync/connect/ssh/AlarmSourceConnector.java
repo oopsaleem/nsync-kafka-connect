@@ -1,5 +1,6 @@
 package noc.nsync.connect.ssh;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -22,10 +23,6 @@ import com.github.jcustenborder.kafka.connect.utils.config.Title;
 @Title("Super Source Connector") //This is the display name that will show up in the documentation.
 @DocumentationNote("This is a note that will show up in the documentation")
 public class AlarmSourceConnector extends SourceConnector {
-  /*
-    Your connector should never use System.out for logging. All of your classes should use slf4j
-    for logging
- */
   private static Logger log = LoggerFactory.getLogger(AlarmSourceConnector.class);
   private AlarmSourceConnectorConfig config;
 
@@ -37,26 +34,23 @@ public class AlarmSourceConnector extends SourceConnector {
   @Override
   public void start(Map<String, String> map) {
     config = new AlarmSourceConnectorConfig(map);
-
-    //TODO: Add things you need to do to setup your connector.
   }
 
   @Override
   public Class<? extends Task> taskClass() {
-    //TODO: Return your task implementation.
     return AlarmSourceTask.class;
   }
 
   @Override
   public List<Map<String, String>> taskConfigs(int i) {
-    //TODO: Define the individual task configurations that will be executed.
-
-    throw new UnsupportedOperationException("This has not been implemented.");
+    //force single task
+    ArrayList<Map<String, String>> configs = new ArrayList<>(1);
+    configs.add(config.originalsStrings());
+    return configs;
   }
 
   @Override
   public void stop() {
-    //TODO: Do things that are necessary to stop your connector.
   }
 
   @Override

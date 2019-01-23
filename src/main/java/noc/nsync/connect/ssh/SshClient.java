@@ -22,9 +22,9 @@ public class SshClient {
     private static String ENTER_CHARACTER = "\r";
     private static final int SSH_PORT = 22;
     private List<String> lstCmds = new ArrayList<String>();
-    private static String[] linuxPromptRegEx = new String[]{"\\>","#", "~#", "$"};
+    private static String[] linuxPromptRegEx = new String[]{"\\>","#", "~#", "$", "<"};
 
-    private Expect4j expect = null;
+    public Expect4j expect = null;
     private StringBuilder buffer = new StringBuilder();
     private String userName;
     private String password;
@@ -48,11 +48,8 @@ public class SshClient {
     public String execute(List<String> cmdsToExecute) {
         this.lstCmds = cmdsToExecute;
 
-        Closure closure = new Closure() {
-            public void run(ExpectState expectState) throws Exception {
-                buffer.append(expectState.getBuffer());
-            }
-        };
+        Closure closure = expectState -> buffer.append(expectState.getBuffer());
+
         List<Match> lstPattern =  new ArrayList<Match>();
         for (String regexElement : linuxPromptRegEx) {
             try {
@@ -133,15 +130,5 @@ public class SshClient {
         if (expect!=null) {
             expect.close();
         }
-    }
-
-    public static void main(String[] args) {
-        SshClient ssh = new SshClient("host", "user", "pwd");
-        List<String> commandsToExecute = new ArrayList<String>();
-        commandsToExecute.add("ls");
-        commandsToExecute.add("pwd");
-        commandsToExecute.add("mkdir testdir");
-        String outputLog = ssh.execute(commandsToExecute);
-        System.out.println(outputLog);
     }
 }
