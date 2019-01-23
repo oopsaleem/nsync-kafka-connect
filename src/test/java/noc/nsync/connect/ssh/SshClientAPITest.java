@@ -2,6 +2,7 @@ package noc.nsync.connect.ssh;
 
 import net.sf.expectit.MultiResult;
 import org.joda.time.DateTime;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -24,7 +25,7 @@ class SshClientAPITest {
         return baseProps;
     }
 
-    @Test
+    @Disabled
     void Constructor() {
         try {
             SshClientAPI client = new SshClientAPI(new AlarmSourceConnectorConfig(initConfig()));
@@ -65,7 +66,7 @@ class SshClientAPITest {
         }
     }
 
-    @Test
+    @Disabled
     void execute() {
         SshClient ssh = new SshClient("remote", "user", "something");
 
